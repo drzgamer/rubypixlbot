@@ -28,7 +28,9 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(post_params)
+	assign_params = post_params.dup;
+	assign_params.delete(:getcat)
+    @post = Post.new(assign_params)
 
     respond_to do |format|
       if @post.save
