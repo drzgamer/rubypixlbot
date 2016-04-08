@@ -11,10 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407230800) do
+ActiveRecord::Schema.define(version: 20160408045151) do
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "catrelations", force: :cascade do |t|
+    t.integer  "post_id"
+    t.integer  "category_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "catrelations", ["category_id"], name: "index_catrelations_on_category_id"
+  add_index "catrelations", ["post_id"], name: "index_catrelations_on_post_id"
 
   create_table "posts", force: :cascade do |t|
-    t.string   "type"
+    t.string   "post_type"
     t.string   "author"
     t.datetime "date"
     t.text     "title"
@@ -24,6 +40,7 @@ ActiveRecord::Schema.define(version: 20160407230800) do
     t.text     "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "category"
   end
 
 end

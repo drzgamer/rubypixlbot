@@ -11,7 +11,8 @@ class PostsController < ApplicationController
   # GET /posts/1.json
   def show
   end
-
+  
+  
   # GET /posts/new
   def new
     @post = Post.new
@@ -20,6 +21,9 @@ class PostsController < ApplicationController
   # GET /posts/1/edit
   def edit
   end
+  
+  
+
 
   # POST /posts
   # POST /posts.json
@@ -41,7 +45,15 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
-      if @post.update(post_params)
+	  
+	  assign_params = post_params.dup;
+	  assign_params.delete(:getcat)
+	  
+	  @post.updatecat(post_params[:getcat])
+	  
+	  print assign_params
+	  print post_params
+      if @post.update(assign_params)
         format.html { redirect_to @post, notice: 'Post was successfully updated.' }
         format.json { render :show, status: :ok, location: @post }
       else
@@ -69,6 +81,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:category, :post_type, :author, :date, :title, :content, :excerpt, :status, :name)
+      params.require(:post).permit(:category, :post_type, :author, :date, :title, :content, :excerpt, :status, :name, :lastedit, :getcat)
     end
 end

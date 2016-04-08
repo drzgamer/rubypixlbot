@@ -10,6 +10,7 @@ class CreatePosts < ActiveRecord::Migration
       t.text :excerpt
       t.text :status
       t.text :name
+      t.datetime :lastedit
 
       t.timestamps null: false
     end
