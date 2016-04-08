@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
-@import 'normalize';
+@import url("normalize.css.scss");
 
 html, body {
 	font-family: 'Raleway', sans-serif;
@@ -29,13 +29,13 @@ a {
 }
 
 #sidebar {
-	width: 250px;
+	width: 160px;
 	position: fixed;
 	left: 0;
 	top: 0;
 	height: 100%;
-	background: #f5f7f9;
-	padding: 7em 0 0 0;
+	background: #363b3f;
+	padding: 32px 0 0 0;
 	border-right: 1px solid #d6dce0;
 	#logo {
 		width: 40px;
@@ -124,7 +124,7 @@ a {
 	.tablerow{
 		height: 50px;
 		margin: 10px;
-		font-size: 16px;
+		font-size: 14px;
 		td{
 			padding: 0 10px;
 		}

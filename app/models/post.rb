@@ -6,20 +6,19 @@ class Post < ActiveRecord::Base
 	def getcat
 		@ids = Catrelation.where(post_id: self.id).all
 		
-		hello = ""
+		foo = ""
 		counter = 0
 		@ids.each  do |post|
 			
 			if counter == 0
-				hello = hello + post.category_id.to_s
+				foo = foo + post.category_id.to_s
 			else
-				hello = hello + "," + post.category_id.to_s 
+				foo = foo + "," + post.category_id.to_s 
 			end
 			counter += 1
 			
 		end
-		print hello
-		return hello
+		return foo
 	end
 	
 	def updatecat(cats)

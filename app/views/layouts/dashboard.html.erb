@@ -7,16 +7,45 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+	<div id="adminbar">
+	  <nav>
+		  <ul>
+			  <li><%= link_to("Pixlbot", root_path + "dashboard") %>
+				<ul>
+					<li><%= link_to("Dashboard", root_path + "dashboard") %></li>
+				</ul>
+			  
+			  </li>
+			  <li><a href="#">New</a>
+				  <ul>
+					  <li><%= link_to("Post", root_path + "dashboard/posts/new") %></li>
+					  <li><a href="#">Review</a></li>
+				  </ul>
+			  </li>
+		  </ul>
+	  </nav>
+	  <nav style="float: right; margin-right: 100px;">
+		<ul>
+			<li><a>Hey Person!</a>
+			  <ul>
+				  <li><a>Log Out</a></li>
+			  </ul>
+			
+			</li>
 
-	<div id="sidebar">
+		</ul>
+	</nav>
+	
+	
 
 	</div>
 
-	<div id="main_content">
-		<div id="header">
-			hello
+	<div id="sidebar">
+	  Yo
+	</div>
 
-		</div>
+	<div id="main_content">
+
 
 		<div id="content">
 		  <%= yield %>
