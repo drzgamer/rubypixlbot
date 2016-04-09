@@ -35,7 +35,7 @@ a {
 	top: 0;
 	height: 100%;
 	background: #363b3f;
-	padding: 32px 0 0 0;
+	padding: 40px 0 0 0;
 	border-right: 1px solid #d6dce0;
 	#logo {
 		width: 40px;
@@ -43,40 +43,7 @@ a {
 		right: 3em;
 		top: 3em;
 	}
-	ul {
-		list-style: none;
-		text-align: right;
-		padding-right: 3em;
-		.category {
-			font-weight: 700;
-			font-size: 0.7em;
-			text-transform: uppercase;
-			color: #33acb7;
-		}
-		li {
-			padding: .5em 0;
-			a {
-				color: #9eafba;
-				text-decoration: none;
-				transition: all .4s ease;
-				&:hover {
-					color: #33acb7;
-				}
-			}
-		}
-		.active {
-			a {
-				color: #33acb7;
-			}
-		}
-	}
-	.sign_in {
-		position: absolute;
-		right: 3em;
-		top: 80%;
-		font-size: .8em;
-		color: #9eafba;
-	}
+
 }
 
 .button {
@@ -147,7 +114,7 @@ a {
 }
 
 #main_content {
-	margin-left: 250px;
+	margin-left: 160px;
 	width: auto;
 	overflow: hidden;
 	

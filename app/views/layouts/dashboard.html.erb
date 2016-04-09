@@ -41,7 +41,33 @@
 	</div>
 
 	<div id="sidebar">
-	  Yo
+	  <div class ="sMenu" name ="Dashboard">
+		<a href="<%= root_url + "dashboard/" %>"><div class=sHeader >Dashboard</div></a>
+		<ul>
+		  <a href="<%= root_url + "dashboard/" %>"><li>Home</li></a>
+		</ul>
+	  </div>
+	  <div class ="sMenu" name ="Posts">
+		<a href="<%= root_url + "dashboard/posts" %>"><div class=sHeader >Posts</div></a>
+		<ul>
+		  <a href="<%= root_url + "dashboard/posts" %>"><li>All Post</li></a>
+		  <a href="<%= root_url + "dashboard/posts/new" %>"><li>New Post</li></a>
+		</ul>
+	  </div>
+	  <div class ="sMenu" name ="Reviews">
+		<a href="<%= root_url + "dashboard/" %>"><div class=sHeader >Reviews</div></a>
+		<ul>
+		  <a href="<%= root_url + "dashboard/" %>"><li>All Reviews</li></a>
+		  <a href="<%= root_url + "dashboard/" %>"><li>New Reviews</li></a>
+		</ul>
+	  </div>
+	  	  <div class ="sMenu" name ="Users">
+		<a href="<%= root_url + "dashboard/" %>"><div class=sHeader >Users</div></a>
+		<ul>
+		  <a href="<%= root_url + "dashboard/" %>"><li>All Users</li></a>
+		  <a href="<%= root_url + "dashboard/" %>"><li>New Users</li></a>
+		</ul>
+	  </div>
 	</div>
 
 	<div id="main_content">
