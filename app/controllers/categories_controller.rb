@@ -1,10 +1,22 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
+  layout "dashboard"
 
   # GET /categories
   # GET /categories.json
   def index
-    @categories = Category.all
+    if params[:term]
+      @categories = Category.where('name LIKE ?', "%#{params[:term]}%")
+      print @categories.as_json(:only => [:id,:name])
+    else
+      @categories = Category.all
+    end
+  
+    respond_to do |format|  
+      format.html # index.html.erb  
+  # Here is where you can specify how to handle the request for "/people.json"
+      format.json { render :json => @categories.as_json(:only => [:id,:name]) }
+    end
   end
 
   # GET /categories/1

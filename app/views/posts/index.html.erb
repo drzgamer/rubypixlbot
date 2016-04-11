@@ -15,9 +15,14 @@
   <tbody>
     <% @posts.each do |post| %>
       <tr class ="tablerow">
-        <td style ="font-size: 16px;"><%= link_to post.title, edit_post_path(post) %></td>
+		<% if post.title == "" %>
+		  <td style ="font-size: 16px;"><%= link_to "(no title)", edit_post_path(post) %></td>
+		<%else %>
+		  <td style ="font-size: 16px;"><%= link_to post.title, edit_post_path(post) %></td>
+		<% end %>
+        
         <td><%= post.author %></td>
-		<td><%= post.category %></td>
+		<td><%= post.getcat %></td>
         <td><%= post.updated_at.in_time_zone('Eastern Time (US & Canada)').strftime("Last Modified %m/%d/%Y")      %></td>
 
 

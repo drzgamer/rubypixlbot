@@ -1,3 +1,42 @@
+<script type="text/javascript">
+    $(function() {
+
+ // Below is the name of the textfield that will be autocomplete    
+    $('#select_origin').autocomplete({
+ // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+            minLength: 2,
+ // This is the source of the auocomplete suggestions. In this case a list of names from the people controller, in JSON format.
+            source: '<%= root_path + "dashboard/categories.json" %>',
+  // This updates the textfield when you move the updown the suggestions list, with your keyboard. In our case it will reflect the same value that you see in the suggestions which is the person.given_name.
+            focus: function(event, ui) {
+                $('#select_origin').val(ui.item.name);
+                return false;
+            },
+ // Once a value in the drop down list is selected, do the following:
+            select: function(event, ui) {
+ // place the person.given_name value into the textfield called 'select_origin'...
+                $('#select_origin').val(ui.item.name);
+ // and place the person.id into the hidden textfield called 'link_origin_id'. 
+        $('#link_origin_id').val(ui.item.id);
+                return false;
+            }
+        })
+ // The below code is straight from the jQuery example. It formats what data is displayed in the dropdown box, and can be customized.
+        .data("uiAutocomplete")._renderItem = function( ul, item ) {
+            return $( "<li></li>" )
+                .data( "item.autocomplete", item )
+ // For now which just want to show the person.given_name in the list.
+                .append( "<a>" + item.name + "</a>" )
+                .appendTo( ul );
+        };
+        $(".editor_box").accordion({ header: "h3", collapsible: true });
+    });
+    </script>
+
+
+
+
+
 <%= form_for(@post) do |f| %>
   <% if @post.errors.any? %>
     <div id="error_explanation">
@@ -11,44 +50,109 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :post_type %><br>
-    <%= f.text_field :post_type %>
-  </div>
-  <div class="field">
-    <%= f.label :author %><br>
-    <%= f.text_field :author %>
+  <div id="main_editor">
+
+      <div class="field main_editor_title">
+        <%= f.text_field :title %>
+      </div>
+      <div class="field">
+        <% if @post.post_type ==  "posts" %>
+            <%= root_url + "posts/" %>
+        <% end %>
+        <%= f.text_field :name, :class => "f_name" %>
+      </div>
+      <div class="field">
+        <br>
+        <%= f.text_area :content, :class => "tinymce", :rows => 20 %>
+        <script type="text/javascript">
+        if (typeof tinyMCE != 'undefined') {
+          tinyMCE.init({
+            selector: "textarea.tinymce",
+            toolbar: ["bold italic underline bullist numlist blockquote alignleft aligncenter alignright readmore", "styleselect | removeformat outdent indent undo redo | image link code"],
+            plugins: "image,link,code",
+            menubar: false,
+            setup: function (editor) {
+                editor.addButton('readmore', {
+                  text: 'Read More',
+                  icon: false,
+                  onclick: function () {
+                    editor.insertContent('<!--more-->');
+                  }
+                });
+              },
+            content_css: [
+                '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+                '//www.tinymce.com/css/codepen.min.css'
+            ]
+          });
+        } else {
+          setTimeout(arguments.callee, 50);
+        }
+      </script>
+      </div>
+
+    <div class="editor_box">
+        <h3><%= f.label :excerpt %></h3>
+        <div class="field">
+          <%= f.text_area :excerpt %>
+        </div>
+    </div>
+    <div class="editor_box">
+        <h3><%= f.label :author %></h3>
+      <div class="field">
+        <%= f.text_field :author %>
+      </div>
+    </div>
+
   </div>
   
-  <div class="field">
-    <%= f.label "Categories" %><br>
-    <%= f.text_field :getcat %>
-  </div>
-  <div class="field">
-    <%= f.label :date %><br>
-    <%= f.datetime_select :date %>
-  </div>
-  <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_area :title %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br>
-    <%= f.text_area :content %>
-  </div>
-  <div class="field">
-    <%= f.label :excerpt %><br>
-    <%= f.text_area :excerpt %>
-  </div>
-  <div class="field">
-    <%= f.label :status %><br>
-    <%= f.text_area :status %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_area :name %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div id="side_editor">
+    <div class="editor_box">
+        <h3>Publish</h3>
+        <div>
+        <div class="field">
+            <%= f.label :date %><br>
+            <%= f.datetime_select :date %>
+        </div>
+        
+        <div class="field">
+            <%= f.label :status %><br>
+            <%= f.select :status, options_for_select(["Draft", "Publish"], f.object.status)%>
+        
+        </div>
+        <div class="field">
+            <%= f.label :post_type %><br>
+            <%= f.text_field :post_type %>
+        </div>
+        
+        <div class="actions">
+            <%= f.submit "Save Draft", name: "status_button" %>
+            <%= f.submit "Publish", name: "status_button" %>
+        </div>
+            
+        </div>
+
+        
+    </div>
+
+    
+    <div class= "editor_box" >
+        <!-- Place the following text fields in your form, the names are not important. What is important is that they match the names in your javascript above -->
+        <p>
+              Select which person you want to link:<br /> 
+      <!-- This is the textfield that will autocomplete. What is displayed here is for the user to see but the data will not go anywhere -->
+              <input id="select_origin"/>
+      <!-- This is the hidden textfield that will be given the Persons ID based on who is selected. This value will be sent as a parameter -->
+            <input id="link_origin_id" name="link[origin_id]" type="hidden"/>
+        </p>
+        <div class="field">
+            <%= f.label "Categories" %><br>
+            <%= f.text_field :getcat %>
+        </div>
+        
+    </div>
+    
+  
+
   </div>
 <% end %>

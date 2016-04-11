@@ -22,6 +22,7 @@ class PostsController < ApplicationController
   def edit
   end
   
+
   
 
 
@@ -32,10 +33,12 @@ class PostsController < ApplicationController
 	assign_params.delete(:getcat)
     @post = Post.new(assign_params)
 
+    
+
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        format.json { render :show, status: :created, location: @post }
+        format.html { redirect_to dashboard_url + "/posts/" + assign_params[:name] + "/edit", notice: 'Post was successfully created.' }
+        format.json { render :edit, status: :created, location: @post }
       else
         format.html { render :new }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -48,16 +51,19 @@ class PostsController < ApplicationController
   def update
     respond_to do |format|
 	  
-	  assign_params = post_params.dup;
-	  assign_params.delete(:getcat)
-	  
-	  @post.updatecat(post_params[:getcat])
-	  
-	  print assign_params
-	  print post_params
+
+	
+	  assign_params = @post.cleanparams(post_params)
+	  if params[:status_button] == "Publish"
+		assign_params[:status] = "Publish"
+	  else
+		assign_params[:status] = "Draft"
+	  end
+      
+	  print params
       if @post.update(assign_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
-        format.json { render :show, status: :ok, location: @post }
+        format.html { redirect_to dashboard_url + "/posts/" + assign_params[:name] + "/edit", notice: 'Post was successfully updated.' }
+        format.json { render :edit, status: :ok, location: @post }
       else
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -78,7 +84,7 @@ class PostsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
-      @post = Post.find(params[:id])
+      @post = Post.find_by name: params[:id]
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -117,6 +117,7 @@ a {
 	margin-left: 160px;
 	width: auto;
 	overflow: hidden;
+	background-color: #f1f1f1;
 	
 	#header {
 		padding: 1em 3em;
@@ -148,19 +149,34 @@ a {
 	.links {
 		margin: 2em 0;
 	}
-	input[type="text"], input[type="email"], input[type="password"], textarea {
+
+}
+
+#main_editor{
+	width: 80%;
+	float: left;
+	padding: 10px;
+	overflow: hidden;
+	.main_editor_title{
+		font-size: 20px;
+		input[type="text"]{
+			width: 100%;
+		}
+	}
+	input[type="text"],textarea {
 		width: 90%;
 		border: 1px solid #d6dce0;
-		border-radius: .35em;
 		margin-top: 10px;
-		padding: .5em 1em;
+		border-radius: 0;
+		padding: 0;
 		line-height: 1.75;
 	}
 	input[type="text"] {
 		height: 35px;
 	}
 	textarea {
-		min-height: 180px;
+		width: 99%;
+		min-height: 100px;
 	}
 	input[type="submit"] {
 		outline: none;
@@ -168,11 +184,66 @@ a {
 		border: 1px solid #d6dce0;
 		padding: .5em 1.5em;
 		font-size: 1.1em;
-		border-radius: 1.5em;
 		margin-left: .5em;
 		&:hover {
 			border: 1px solid #33acb7;
 			color: #33acb7;
+		}
+	}
+	
+	.f_name{
+		width: 300px !important;
+	}
+	.editor_box{
+		margin: 10px 0;
+		
+		h3{
+			background: none;
+			color: black;
+			border: 1px solid #e5e5e5;
+		}
+		div{
+			background: white;
+		}
+		.ui-icon { display: none; }
+		.ui-accordion-header a { padding-left: 0; }
+		.ui-widget-content{
+			background: none;
+		}
+		
+		
+	}
+	
+}
+#side_editor{
+	float: left;
+	width: 15%;
+	padding: 10px;
+	.editor_box{
+		margin: 10px 0;
+		border: 1px solid #e5e5e5;
+		padding: 0;
+		overflow: hidden;
+		h3{
+			background: none;
+			color: black;
+			border: 1px solid #e5e5e5;
+		}
+		div{
+			background: white;
+		}
+		.ui-icon {
+			display: none;
+		}
+		.ui-accordion {
+			padding: 0;
+		}
+		.ui-accordion-content{
+			padding: 0;
+		}
+		.ui-accordion-header a { padding-left: 0; }
+		.ui-widget-content{
+			background: none;
 		}
 	}
 }
