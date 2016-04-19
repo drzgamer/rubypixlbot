@@ -1,35 +1,84 @@
 <script type="text/javascript">
     $(function() {
+        var cat_array = new Array();
+        
+        var temp = '<%= @post.getcat %>';
+        
+        if (temp != ''){
+            cat_array = temp.split(',');
+            
+        }
+        jQuery.isInArray = function(value, array) {
+          return -1 < jQuery.inArray(value, array);
+        }
+        $( "#cat_list" ).sortable({
+			update: function(event, ui) {
+			cat_array = $(this).sortable('toArray', {attribute: 'gameid'});
+			$("#link_origin_id").attr("value",cat_array.toString());
+			}
+    
+    
+        });
+		$( "#cat_list" ).on( "click", ".icon-delete", function() {
+			var removeItem = $(this).parent('.cat_list_item').attr('gameid');
+			cat_array = jQuery.grep(cat_array, function(value) {
+			  return value != removeItem;
+			});
+			$(this).parent('.cat_list_item').remove();
+			$("#link_origin_id").attr("value",cat_array.toString());
+			
+		});
+        
+        updateCatValue = function(cat_item){
+            cat_array.push(cat_item.id);
+            $("#link_origin_id").attr("value",cat_array.toString());
+            $("#cat_list").append("<div class='cat_list_item' gameid='"+ cat_item.id +"'><i class='icon-moveable'></i><div class='cat_list_item_name'>" + cat_item.name + "</div><i class='icon-delete'></i></div> "); 
+        }
+        
+        
+        
 
- // Below is the name of the textfield that will be autocomplete    
-    $('#select_origin').autocomplete({
- // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+        // Below is the name of the textfield that will be autocomplete    
+        $('#select_origin').autocomplete({
+            // This shows the min length of charcters that must be typed before the autocomplete looks for a match.
             minLength: 2,
- // This is the source of the auocomplete suggestions. In this case a list of names from the people controller, in JSON format.
+            // This is the source of the auocomplete suggestions. In this case a list of names from the people controller, in JSON format.
             source: '<%= root_path + "dashboard/categories.json" %>',
-  // This updates the textfield when you move the updown the suggestions list, with your keyboard. In our case it will reflect the same value that you see in the suggestions which is the person.given_name.
+            // This updates the textfield when you move the updown the suggestions list, with your keyboard. In our case it will reflect the same value that you see in the suggestions which is the person.given_name.
             focus: function(event, ui) {
                 $('#select_origin').val(ui.item.name);
                 return false;
             },
- // Once a value in the drop down list is selected, do the following:
+            // Once a value in the drop down list is selected, do the following:
             select: function(event, ui) {
- // place the person.given_name value into the textfield called 'select_origin'...
+                // place the person.given_name value into the textfield called 'select_origin'...
                 $('#select_origin').val(ui.item.name);
- // and place the person.id into the hidden textfield called 'link_origin_id'. 
-        $('#link_origin_id').val(ui.item.id);
+                if(cat_array.length > 1){
+                    if($.isInArray(ui.item.id , cat_array)){
+                        updateCatValue(ui.item);
+                    }
+                }else{
+                    if(cat_array[0] != ui.item.id){
+                       updateCatValue(ui.item);
+                    }
+                }
+                
+                
+                // and place the person.id into the hidden textfield called 'link_origin_id'. 
                 return false;
             }
         })
- // The below code is straight from the jQuery example. It formats what data is displayed in the dropdown box, and can be customized.
+        // The below code is straight from the jQuery example. It formats what data is displayed in the dropdown box, and can be customized.
         .data("uiAutocomplete")._renderItem = function( ul, item ) {
             return $( "<li></li>" )
                 .data( "item.autocomplete", item )
- // For now which just want to show the person.given_name in the list.
+                // For now which just want to show the person.given_name in the list.
                 .append( "<a>" + item.name + "</a>" )
                 .appendTo( ul );
         };
+        
         $(".editor_box").accordion({ header: "h3", collapsible: true });
+
     });
     </script>
 
@@ -56,7 +105,9 @@
         <%= f.text_field :title %>
       </div>
       <div class="field">
-        <% if @post.post_type ==  "posts" %>
+        <% if @post.post_type ==  "reviews" %>
+            <%= root_url + "revews/" %>
+        <% else %>    
             <%= root_url + "posts/" %>
         <% end %>
         <%= f.text_field :name, :class => "f_name" %>
@@ -108,27 +159,43 @@
   
   <div id="side_editor">
     <div class="editor_box">
+        
         <h3>Publish</h3>
         <div>
-        <div class="field">
-            <%= f.label :date %><br>
-            <%= f.datetime_select :date %>
-        </div>
-        
-        <div class="field">
-            <%= f.label :status %><br>
-            <%= f.select :status, options_for_select(["Draft", "Publish"], f.object.status)%>
-        
-        </div>
-        <div class="field">
-            <%= f.label :post_type %><br>
-            <%= f.text_field :post_type %>
-        </div>
-        
-        <div class="actions">
-            <%= f.submit "Save Draft", name: "status_button" %>
-            <%= f.submit "Publish", name: "status_button" %>
-        </div>
+            
+            
+            <% if (request.env['PATH_INFO'] == "/dashboard/posts/new" or f.object.status == "Draft")%>
+                <div class="actions">
+                    <%= f.submit "Save Draft", name: "status_button" %>
+                </div>
+
+            <% end %>
+            <% if (request.env['PATH_INFO'] == "/dashboard/posts/#{f.object.name}/edit")%>
+                <div class="actions">
+                    <%= f.submit "Preview", name: "status_button" %>
+                </div>
+            <% end %>
+                
+            
+            <div class="field">
+                <%= f.label :date %><br>
+                <%= f.datetime_select :date %>
+            </div>
+            
+            <div class="field">
+                <%= f.label :status %><br>
+                <%= f.select :status, options_for_select(["Draft", "Publish"], f.object.status)%>
+            
+            </div>
+            <div class="field">
+                <%= f.label :post_type %><br>
+                <%= f.text_field :post_type %>
+            </div>
+            
+            <div class="actions">
+                
+                <%= f.submit "Publish", name: "status_button" %>
+            </div>
             
         </div>
 
@@ -137,17 +204,35 @@
 
     
     <div class= "editor_box" >
-        <!-- Place the following text fields in your form, the names are not important. What is important is that they match the names in your javascript above -->
-        <p>
-              Select which person you want to link:<br /> 
-      <!-- This is the textfield that will autocomplete. What is displayed here is for the user to see but the data will not go anywhere -->
-              <input id="select_origin"/>
-      <!-- This is the hidden textfield that will be given the Persons ID based on who is selected. This value will be sent as a parameter -->
-            <input id="link_origin_id" name="link[origin_id]" type="hidden"/>
-        </p>
-        <div class="field">
-            <%= f.label "Categories" %><br>
-            <%= f.text_field :getcat %>
+        <h3>Categories</h3>
+        <div>
+            <!-- Place the following text fields in your form, the names are not important. What is important is that they match the names in your javascript above -->
+            <p>
+                
+                <!-- This is the textfield that will autocomplete. What is displayed here is for the user to see but the data will not go anywhere -->
+                <div id = "cat_input">
+                    Search Categories:<br /> 
+                    <input id="select_origin"/>
+                </div>
+                <!-- This is the hidden textfield that will be given the Persons ID based on who is selected. This value will be sent as a parameter -->
+                <input id="link_origin_id" name="categories_params" type="hidden" value='<%= @post.getcat %>'/>
+    
+            </p>
+            <div id="cat_list">
+                <% @post.getcat.split(",").each do |cats| %>
+                    <div class="cat_list_item" gameid="<%= cats %>">
+                        <i class="icon-moveable"></i>
+                        <div class="cat_list_item_name">
+                            <%= Category.find(cats).name %>
+                        </div>
+                        <i class="icon-delete"></i>
+                        
+                    </div>
+                
+                <% end %>
+                    
+    
+            </div>
         </div>
         
     </div>

@@ -14,6 +14,7 @@
  *= require_self
  */
 @import url("normalize.css.scss");
+@import url("jquery/jquery-ui.css");
 
 html, body {
 	font-family: 'Raleway', sans-serif;
@@ -153,7 +154,7 @@ a {
 }
 
 #main_editor{
-	width: 80%;
+	width: 75%;
 	float: left;
 	padding: 10px;
 	overflow: hidden;
@@ -164,7 +165,6 @@ a {
 		}
 	}
 	input[type="text"],textarea {
-		width: 90%;
 		border: 1px solid #d6dce0;
 		margin-top: 10px;
 		border-radius: 0;
@@ -205,11 +205,15 @@ a {
 		div{
 			background: white;
 		}
-		.ui-icon { display: none; }
-		.ui-accordion-header a { padding-left: 0; }
-		.ui-widget-content{
-			background: none;
+		.ui-icon { 
+			display: none; 
+			
 		}
+		.ui-accordion-header a { 
+			padding-left: 0; 
+			
+		}
+
 		
 		
 	}
@@ -217,11 +221,11 @@ a {
 }
 #side_editor{
 	float: left;
-	width: 15%;
+	width: 20%;
 	padding: 10px;
 	.editor_box{
 		margin: 10px 0;
-		border: 1px solid #e5e5e5;
+		border: none;
 		padding: 0;
 		overflow: hidden;
 		h3{
@@ -231,6 +235,21 @@ a {
 		}
 		div{
 			background: white;
+			border-radius: 0;
+			padding: 10px;
+ 
+		}
+		.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr{
+
+	        -moz-border-radius-topright: 0;
+		    -webkit-border-top-right-radius: 0;
+		    -khtml-border-top-right-radius: 0;
+		    border-top-right-radius: 0;
+		    
+            -moz-border-radius-topleft: 0;
+		    webkit-border-top-left-radius: 0; 
+		    -khtml-border-top-left-radius: 0;
+		    border-top-left-radius: 0;
 		}
 		.ui-icon {
 			display: none;
@@ -241,9 +260,62 @@ a {
 		.ui-accordion-content{
 			padding: 0;
 		}
-		.ui-accordion-header a { padding-left: 0; }
-		.ui-widget-content{
-			background: none;
+		.ui-accordion-header a { 
+			padding-left: 0; 
+			
 		}
+
+	}
+	#select_origin{
+		width: 100%;
+	}
+	#cat_input{
+		margin: 0 auto;
+		width: 90%;
+	}
+
+	#cat_list{
+		width: 90%;
+		margin: 0 auto 10px auto;
+		overflow: hidden;
+		min-height: 200px;
+		border: 1px solid #e5e5e5;
+		
+		.cat_list_item{
+			height: 15px;
+			overflow: hidden;
+			margin: 10px;
+			border: 1px solid #e5e5e5;
+			cursor: move;
+			
+			.cat_list_item_name{
+				float: left;
+				padding: 1px 0 0 5px;
+				font-size: .75em;
+			}
+			.icon-moveable{
+				float:left;
+			}
+			.icon-delete{
+				float:right;
+			}
+			.icon-moveable:before {
+				font-family: dashcons;
+				content: "\f156";
+				font-size: 1em;
+				
+			}
+			.icon-delete:before {
+				font-family: dashcons;
+				content: "\f153";
+				font-size: 1em;
+				cursor: pointer;
+				
+				
+			}
+
+
+		}
+		
 	}
 }

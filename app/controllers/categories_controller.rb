@@ -11,7 +11,6 @@ class CategoriesController < ApplicationController
     else
       @categories = Category.all
     end
-  
     respond_to do |format|  
       format.html # index.html.erb  
   # Here is where you can specify how to handle the request for "/people.json"

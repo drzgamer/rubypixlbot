@@ -22,6 +22,10 @@ class PostsController < ApplicationController
   def edit
   end
   
+  def clean
+      
+  end
+  
 
   
 
@@ -29,14 +33,22 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-	assign_params = post_params.dup;
-	assign_params.delete(:getcat)
-    @post = Post.new(assign_params)
 
-    
 
     respond_to do |format|
-      if @post.save
+
+      @post = Post.new()
+      
+  	  assign_params = post_params.dup;
+      
+  	  assign_params = @post.cleanparams(post_params,params) 
+  	  if params[:status_button] == "Publish"
+  		  assign_params[:status] = "Publish"
+  	  else
+  		  assign_params[:status] = "Draft"
+  	  end
+
+      if @post.update(assign_params)
         format.html { redirect_to dashboard_url + "/posts/" + assign_params[:name] + "/edit", notice: 'Post was successfully created.' }
         format.json { render :edit, status: :created, location: @post }
       else
@@ -50,17 +62,16 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
-	  
-
-	
-	  assign_params = @post.cleanparams(post_params)
-	  if params[:status_button] == "Publish"
-		assign_params[:status] = "Publish"
-	  else
-		assign_params[:status] = "Draft"
-	  end
+      print "Im Here"
+      print params.to_json
       
-	  print params
+  	  assign_params = @post.cleanparams(post_params,params)
+  	  if params[:status_button] == "Publish"
+  		assign_params[:status] = "Publish"
+  	  else
+  		assign_params[:status] = "Draft"
+  	  end
+        
       if @post.update(assign_params)
         format.html { redirect_to dashboard_url + "/posts/" + assign_params[:name] + "/edit", notice: 'Post was successfully updated.' }
         format.json { render :edit, status: :ok, location: @post }

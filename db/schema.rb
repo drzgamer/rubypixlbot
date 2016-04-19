@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160408045151) do
+ActiveRecord::Schema.define(version: 20160418222021) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -29,18 +29,24 @@ ActiveRecord::Schema.define(version: 20160408045151) do
   add_index "catrelations", ["category_id"], name: "index_catrelations_on_category_id"
   add_index "catrelations", ["post_id"], name: "index_catrelations_on_post_id"
 
+  create_table "dashboards", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string   "post_type"
     t.string   "author"
+    t.string   "category"
     t.datetime "date"
     t.text     "title"
     t.text     "content"
     t.text     "excerpt"
     t.text     "status"
     t.text     "name"
+    t.datetime "lastedit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "category"
   end
 
 end

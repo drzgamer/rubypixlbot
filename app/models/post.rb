@@ -25,19 +25,22 @@ class Post < ActiveRecord::Base
 	end
 	
 	def updatecat(cats)
-		catarry = cats.split(",")
-		Catrelation.where(post_id: self.id).delete_all
-		catarry.each do |catter|
-				Catrelation.create(post_id: self.id, category_id: catter)
-            
+		if cats != nil or cats != ""
+			catarry = cats.split(",")
+			
+			Catrelation.where(post_id: self.id).delete_all
+			catarry.each do |catter|
+					Catrelation.create(post_id: self.id, category_id: catter)
+	            
+			end
 		end
 	end
 	
-	def cleanparams(dezparams)
+	def cleanparams(dezparams,mainparams)
 		a_params = dezparams.dup;
 		a_params.delete(:getcat)
-	  
-		updatecat(dezparams[:getcat])
+	  	print "hello" + mainparams[:categories_params]
+		updatecat(mainparams[:categories_params])
 		
 		if a_params[:name] = ""
 			if a_params[:title] != ""

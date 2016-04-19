@@ -16,6 +16,12 @@ end
 #tinyMCE
 gem 'tinymce-rails'
 
+gem 'jquery-ui-rails'
+
+gem 'devise'
+gem 'cancancan'
+gem 'rolify'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

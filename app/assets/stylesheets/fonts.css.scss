@@ -1,10 +1,20 @@
 @font-face {
+  font-family: 'dashcons';
+   src: font-url('dashicons.eot?50630517');
+  src: font-url('dashicons.eot?50630517#iefix') format('embedded-opentype'),
+       font-url('dashicons.woff?50630517') format('woff'),
+       font-url('dashicons.ttf?50630517') format('truetype'),
+       font-url('dashicons.svg?50630517#hicons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
   font-family: 'hicons';
-   src: url('../font/hicons.eot?50630517');
-  src: url('../font/hicons.eot?50630517#iefix') format('embedded-opentype'),
-       url('../font/hicons.woff?50630517') format('woff'),
-       url('../font/hicons.ttf?50630517') format('truetype'),
-       url('../font/hicons.svg?50630517#hicons') format('svg');
+   src: font-url('hicons.eot?50630517');
+  src: font-url('hicons.eot?50630517#iefix') format('embedded-opentype'),
+       font-url('hicons.woff?50630517') format('woff'),
+       font-url('hicons.ttf?50630517') format('truetype'),
+       font-url('hicons.svg?50630517#hicons') format('svg');
   font-weight: normal;
   font-style: normal;
 }

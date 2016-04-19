@@ -16,9 +16,9 @@
     <% @posts.each do |post| %>
       <tr class ="tablerow">
 		<% if post.title == "" %>
-		  <td style ="font-size: 16px;"><%= link_to "(no title)", edit_post_path(post) %></td>
+		  <td style ="font-size: 16px;"><%= link_to "(no title)", dashboard_url + "/posts/" + post.name + "/edit" %></td>
 		<%else %>
-		  <td style ="font-size: 16px;"><%= link_to post.title, edit_post_path(post) %></td>
+		  <td style ="font-size: 16px;"><%= link_to post.title, dashboard_url + "/posts/" + post.name + "/edit" %></td>
 		<% end %>
         
         <td><%= post.author %></td>
