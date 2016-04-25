@@ -1,0 +1,43 @@
+#image_center{
+    width: 100%;
+    float: left;
+    #image_collection{
+        width: 100%;
+        .image_item{
+            position: relative;
+            float: left;
+            height: 130px;
+            width: 130px;
+            overflow: hidden;
+            border: 1px solid black;
+            margin: 8px;
+            .checkbox{
+                background-color: black;
+                height: 20px;
+                width: 20px;
+                position: absolute;
+                top: 0;
+                left: 110px;
+                display: none;
+            }
+        }
+    }
+
+}
+#image_left{
+    width: 15%;
+    float: left;
+    background: white;
+}
+#image_right{
+    width: 25%;
+    height: 100%;
+    float: right;
+    background: white;
+    display:none;
+    #image_details{
+        width: 100%;
+        
+        
+    }
+}

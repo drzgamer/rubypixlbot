@@ -1,4 +1,4 @@
 class Catrelation < ActiveRecord::Base
-  belongs_to :posts
+  belongs_to :post
   belongs_to :category
 end

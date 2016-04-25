@@ -143,10 +143,14 @@
       </div>
 
     <div class="editor_box">
-        <h3><%= f.label :excerpt %></h3>
+        <h3>Post Meta</h3>
         <div class="field">
-          <%= f.text_area :excerpt %>
+            <%= f.label :excerpt %>
+            <%= f.text_area :excerpt %>
+            <label for="post_excerpt">Source:</label>
+            <%= f.text_field :getsource %>
         </div>
+
     </div>
     <div class="editor_box">
         <h3><%= f.label :author %></h3>

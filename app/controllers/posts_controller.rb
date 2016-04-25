@@ -40,13 +40,8 @@ class PostsController < ApplicationController
       @post = Post.new()
       
   	  assign_params = post_params.dup;
-      
+
   	  assign_params = @post.cleanparams(post_params,params) 
-  	  if params[:status_button] == "Publish"
-  		  assign_params[:status] = "Publish"
-  	  else
-  		  assign_params[:status] = "Draft"
-  	  end
 
       if @post.update(assign_params)
         format.html { redirect_to dashboard_url + "/posts/" + assign_params[:name] + "/edit", notice: 'Post was successfully created.' }
@@ -62,15 +57,8 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
-      print "Im Here"
-      print params.to_json
       
   	  assign_params = @post.cleanparams(post_params,params)
-  	  if params[:status_button] == "Publish"
-  		assign_params[:status] = "Publish"
-  	  else
-  		assign_params[:status] = "Draft"
-  	  end
         
       if @post.update(assign_params)
         format.html { redirect_to dashboard_url + "/posts/" + assign_params[:name] + "/edit", notice: 'Post was successfully updated.' }
@@ -100,6 +88,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:category, :post_type, :author, :date, :title, :content, :excerpt, :status, :name, :lastedit, :getcat)
+      params.require(:post).permit(:category, :post_type, :author, :date, :title, :content, :excerpt, :status, :name, :lastedit, :getcat, :getsource)
     end
 end

@@ -1,46 +1,52 @@
 class Post < ActiveRecord::Base
 	has_many :catrelations
-	has_many :catagories, through: :catrelation
+	has_many :categories, through: :catrelations
+	has_many :post_meta
 	
+	# uses name in url instead of id
 	def to_param
 		name
 	end
 	
+	# retrieves cat
 	def getcat
-		@ids = Catrelation.where(post_id: self.id).all
-		
-		foo = ""
-		counter = 0
-		@ids.each  do |post|
-			
-			if counter == 0
-				foo = foo + post.category_id.to_s
-			else
-				foo = foo + "," + post.category_id.to_s 
-			end
-			counter += 1
-			
+		return self.category_ids.join(",")
+	end
+	
+	#retrives source
+	def getsource
+		foo = post_meta.find_by(meta_key: "_source")
+		if foo
+			return foo.meta_value
+		else
+			return nil
 		end
-		return foo
+
 	end
 	
 	def updatecat(cats)
-		if cats != nil or cats != ""
-			catarry = cats.split(",")
-			
-			Catrelation.where(post_id: self.id).delete_all
-			catarry.each do |catter|
-					Catrelation.create(post_id: self.id, category_id: catter)
-	            
-			end
-		end
+		self.category_ids = cats.split(",")
+		
 	end
+	
+	def updatesource(source)
+	    foo = post_meta.find_by(meta_key: "_source")
+	    if foo
+	      foo.meta_value = source
+	      foo.save
+	    else
+	      post_meta.create(meta_key: "_source" , meta_value: source)
+	    end
+	end
+	
 	
 	def cleanparams(dezparams,mainparams)
 		a_params = dezparams.dup;
 		a_params.delete(:getcat)
-	  	print "hello" + mainparams[:categories_params]
+		a_params.delete(:getsource)
+		
 		updatecat(mainparams[:categories_params])
+		updatesource(dezparams[:getsource])
 		
 		if a_params[:name] = ""
 			if a_params[:title] != ""
@@ -48,6 +54,12 @@ class Post < ActiveRecord::Base
 			else
 				a_params[:name] = "post-" + self.id.to_s
 			end
+		end
+		
+		if params[:status_button] == "Publish"
+		  a_params[:status] = "Publish"
+		else
+		  a_params[:status] = "Draft"
 		end
 
 		return a_params

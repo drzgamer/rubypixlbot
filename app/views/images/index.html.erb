@@ -1,0 +1,155 @@
+<p id="notice"><%= notice %></p>
+
+<script type="text/javascript">
+    $(function() {
+        if(false){
+            $.ajax({
+                url:  '<%= root_path + "dashboard/images.json" %>',
+                dataType: "json",
+                data: {
+                   image_search_id: $(this).find('img').attr("data-image-id")
+                },
+                success: function(data) { 
+                    $('#tech_img').attr("src",  root_url + $(this).attr("data-image-url")) ;
+                    
+                    image_size = data.image_size/1000;
+                    if (image_size > 1000){
+                        $('#tech_size').text((image_size/1000) + "MB") ;
+                        
+                    }else{
+                        $('#tech_size').text(image_size + "KB") ;
+                    }
+                    
+                    var date    = new Date(data.created_at)
+                    locale = "en-us",
+                    month = date.toLocaleString(locale, { month: "long" });
+                    date = date.toLocaleString(locale, { month: "long" }) + " " + date.getDay() + ", " + date.getFullYear()
+                    $('#tech_date').text(date);
+                    $('#tech_delete').attr("href",  '/dashboard/images/' + data.id) ;
+                    
+                    
+                   alert(JSON.stringify(data));
+                }
+            });
+        }
+        
+        
+        var image_center_width = $("#image_center").width()
+        var previousTarget=null;
+        var root_url = '<%= root_url %>'
+        root_url = root_url.slice(0, -1);
+        $(".image_item").click(function() {
+            // hide all entry title elements
+                if(this===previousTarget) {
+                    $(this).find('.checkbox').hide();
+                    $('#image_right').hide();
+                    $('#tech_img').hide();
+                    $('#tech_size').hide();
+                    $('#tech_date').hide();
+                    $('#tech_delete').hide();
+                    $(this).css('box-shadow', 'none');
+                    $("#image_center").animate({ width: (image_center_width)}, 200);
+                    previousTarget = null;
+                }else{
+                    $('.checkbox').hide();
+                    // show the clicked one
+                    $("#image_center").animate({ width: (image_center_width - 420 )}, 200);
+                    
+                    $(this).find('.checkbox').show();
+                    
+                    // background shadow
+                    $(this).css('box-shadow', '0px 0px 6px 3px rgba(18,197,252,1)');
+                    
+                    
+                    $('#image_right').delay(200).show(0);
+                    $('#tech_size').show();
+                    $('#tech_date').show();
+                    $('#tech_delete').show();
+                    
+                    $('#tech_img').show().attr("src",  root_url + $(this).attr("data-image-url")) ;
+                    
+                    image_size = $(this).attr("data-image-size")/1000;
+                    if (image_size > 1000){
+                        $('#tech_size').text((image_size/1000) + "MB") ;
+                        
+                    }else{
+                        $('#tech_size').text(image_size + "KB") ;
+                    }
+                    var date = $(this).attr("data-image-date");
+                    var date    = new Date(date)
+                    locale = "en-us",
+                    month = date.toLocaleString(locale, { month: "long" }),
+                    date = date.toLocaleString(locale, { month: "long" }) + " " + date.getDay() + ", " + date.getFullYear();
+                    $('#tech_date').text(date);
+                    $('#tech_delete').attr("href",  '/dashboard/images/' + $(this).attr("data-image-id")) ;
+                    
+                    
+                   
+                    previousTarget = this;
+                }
+                
+
+        });
+        
+        var redHeight = $('#image_center').height();
+        var brownHeight = $('#image_details').height();
+        
+        if (redHeight > brownHeight){
+            $('#image_details').css('height', redHeight );
+        }
+        else{
+            $('#image_center').css('height', brownHeight);
+        }
+    });
+</script>
+
+<h1>Listing Images</h1>
+
+<div>
+    <% if @form == "insert" %>
+    <div id="image_left">
+    
+        hi
+    </div>
+    <% end %>
+    <div id="image_center">
+        <div id="image_add">
+            <%= link_to 'New Image', new_image_path %>
+        </div>
+        <div id="image_collection">
+            <% @images.each do |image| %>
+                <%= content_tag :div, :class => "image_item" , :data => { :image_id => image.id, :image_size => image.image.size, :image_url => image.image.url(:small), :image_title => image.title + " ", :image_description => image.description + " ", :image_date => image.created_at.to_s} do %>
+                    <div class="checkbox">&nsbp;</div>
+                    <%= image_tag(image.image.url(:thumbnail), :data => { :image_id => image.id}) %>
+                    
+                    <% if false %>
+                        <%= image.title %>
+                        <%= image.description %>
+                        <%= image.image %>
+                        <%= link_to 'Show', image %>
+                        <%= link_to 'Edit', edit_image_path(image) %>
+                        <%= link_to 'Destroy', image, method: :delete, data: { confirm: 'Are you sure?' } %>
+                    <% end %>
+                <% end %>
+
+    
+            <% end %>
+        </div>
+        <br>
+    </div>
+    <div id="image_right">
+  
+        <div id="image_details">
+            <div id="image_tech_details">
+                <img id="tech_img" src=" "/>
+                <div id="tech_size"></div>
+                <div id="tech_date"></div>
+                <a id="tech_delete" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="">Delete Image</a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+

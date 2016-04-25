@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :images, path: '/dashboard/images'
 	root 'home#index'
 	get 'dashboard' => 'dashboards#index'
 	

@@ -1,0 +1,2 @@
+class PostMetaController < ApplicationController
+end
