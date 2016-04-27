@@ -1,0 +1,6 @@
+<% if @image.new_record? %>  
+  alert('Failed');
+<% else %>  
+  $('#image_collection').prepend("<%=j render partial: 'images/image', locals: { image: @image } %>");
+  $("#image_collection div:last-child").remove();
+<% end %>  

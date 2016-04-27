@@ -1,0 +1,5 @@
+<%= content_tag :div, :class => "image_item" , :data => { :image_id => image.id, :image_size => image.image.size,:image_file_name => image.image.original_filename, :small_image_url => image.image.url(:small), :original_image_url => image.image.url(:original), :image_title => image.title, :image_description => image.description , :image_date => image.created_at.to_s} do %>
+    <div class="checkbox">&nsbp;</div>
+    <%= image_tag(image.image.url(:thumbnail), :data => { :image_id => image.id}) %>
+    
+<% end %>

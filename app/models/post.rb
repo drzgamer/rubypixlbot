@@ -55,8 +55,8 @@ class Post < ActiveRecord::Base
 				a_params[:name] = "post-" + self.id.to_s
 			end
 		end
-		
-		if params[:status_button] == "Publish"
+	
+		if mainparams[:status_button] == "Publish"
 		  a_params[:status] = "Publish"
 		else
 		  a_params[:status] = "Draft"

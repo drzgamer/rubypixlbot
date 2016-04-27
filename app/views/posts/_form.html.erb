@@ -79,7 +79,39 @@
         
         $(".editor_box").accordion({ header: "h3", collapsible: true });
 
-    });
+
+        jQuery.HandlePopupResult = function(result) {
+          tinymce.activeEditor.execCommand('mceInsertContent', false, result);
+        }
+        
+        
+        
+        $('#main_editor').on('click', '#insert_image', function() {
+            window.open('https://pixlbotruby-drzgamer.c9users.io/dashboard/images?form=insert', 'ChildWindow', 'menubar=0,resizable=1,location=0,scrollbars=0,status=0,toolbar=0,width=580,height=520');
+
+            
+
+             
+    
+    
+            
+        });
+    
+        var styles = {
+          height : parseInt(window.innerHeight - 40) + 'px',
+          width: parseInt(window.innerWidth - 60) + 'px',
+          top: '20px',
+          left: '20px'
+        };
+        $('#insert_image_box').css( styles );
+        
+        $( "#insert_image_box_parent" ).click(function() {
+             $(this).hide();
+             $('#insert_image_box').html(' ');
+        });
+            
+    
+        });
     </script>
 
 
@@ -98,6 +130,12 @@
       </ul>
     </div>
   <% end %>
+  <div id="insert_image_box_parent">
+    <div id="insert_image_box">
+        hello
+    </div>
+  </div>
+
 
   <div id="main_editor">
 
@@ -112,9 +150,12 @@
         <% end %>
         <%= f.text_field :name, :class => "f_name" %>
       </div>
+      <div>
+          <button type="button" id="insert_image">Insert Image</button>
+      </div>
       <div class="field">
         <br>
-        <%= f.text_area :content, :class => "tinymce", :rows => 20 %>
+        <%= f.text_area :content, :class => "tinymce", :id => "editor1", :rows => 20 %>
         <script type="text/javascript">
         if (typeof tinyMCE != 'undefined') {
           tinyMCE.init({
@@ -129,6 +170,14 @@
                   onclick: function () {
                     editor.insertContent('<!--more-->');
                   }
+                });
+                editor.on('LoadContent', function(e) {
+                    console.log('BeforeSetContent event', e.content);
+                    str = e.content;
+                    str = str.replace("<!--more-->", "Well this is more");
+                    console.log(str);
+                    editor.setContent(str);
+                    
                 });
               },
             content_css: [

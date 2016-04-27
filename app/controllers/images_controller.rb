@@ -1,27 +1,12 @@
 class ImagesController < ApplicationController
   before_action :set_image, only: [:show, :edit, :update, :destroy]
-  layout "dashboard"
+  before_filter :set_layout, :only => [:index]
   # GET /images
   # GET /images.json
   def index
-    if params[:image_search_id]
-      @images = Image.find_by('id = ?', params[:image_search_id])
+    @images = Image.paginate(:page => params[:page], :per_page => 50).order('id DESC')
+    @form = params[:form]
       
-      @imagearray = Array.new
-      
- 
-        @imagearray << {
-          :id => @images.id,
-          :title => @images.title,
-          :description => @images.description,
-          :created_at => @images.created_at,
-          :image_size => @images.image.size,
-          :image_url => @images.image.url(:thumbnail)}
-
-    else  
-      @images = Image.paginate(:page => params[:page], :per_page => 30).order('id DESC')
-      @form = params[:form]
-    end
     respond_to do |format|  
       format.html # index.html.erb  
       # Here is where you can specify how to handle the request for "/people.json"
@@ -47,22 +32,28 @@ class ImagesController < ApplicationController
   # POST /images
   # POST /images.json
   def create
-    print "THESE ARE THE PARAMS"
-    print params[:images]
-    
-    params[:post_attachments]['avatar'].each do |a|
-          @image = Image.create!(:image => a, :title => "", :description => "")
-    end
-
-    redirect_to root_url + "dashboard/images", notice: 'Image was successfully created.'
+    @image = Image.create(image_params)
 
   end
 
   # PATCH/PUT /images/1
   # PATCH/PUT /images/1.json
   def update
-    respond_to do |format|
-      if @image.update(image_params)
+    
+    if params[:_method]
+      print params
+      @image = Image.find(params[:id])
+      
+      @image.title = params[:title]
+      @image.description = params[:description]
+      @image.save
+      respond_to do |format|
+        format.js if request.xhr?
+        format.html {render :nothing => true, status: 200}
+      end
+    else
+      respond_to do |format|
+      if @image.update(params)
         format.html { redirect_to @image, notice: 'Image was successfully updated.' }
         format.json { render :show, status: :ok, location: @image }
       else
@@ -70,6 +61,9 @@ class ImagesController < ApplicationController
         format.json { render json: @image.errors, status: :unprocessable_entity }
       end
     end
+    end
+    
+
   end
 
   # DELETE /images/1
@@ -84,6 +78,16 @@ class ImagesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def set_layout
+      if params[:form] == "insert"
+        self.class.layout "image"
+      else
+        self.class.layout "dashboard"
+      end
+        
+      
+    end
+    
     def set_image
       @image = Image.find(params[:id])
     end

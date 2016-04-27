@@ -1,0 +1,165 @@
+<%= javascript_include_tag 'jquery-fileupload/jquery.fileupload.js','jquery-fileupload/vendor/jquery.ui.widget.js', 'jquery-fileupload/vendor/tmpl.js','jquery-fileupload/jquery.iframe-transport.js' %>
+<%= csrf_meta_tag %>
+<script type="text/javascript">
+    $(function() {
+        
+        
+        var image_center_width = $("#image_center").width()
+        var previousTarget=null;
+        var root_url = '<%= root_url %>'
+        root_url = root_url.slice(0, -1);
+        $('#image_collection').on('click', '.image_item', function() {
+            // hide all entry title elements
+                if(this===previousTarget) {
+                    $(this).find('.checkbox').hide();
+                    $('#image_details').hide();
+                    $(this).css('box-shadow', 'none');
+                    previousTarget = null;
+                }else{
+                    $('.checkbox').hide();
+                    $('.image_item').css('box-shadow', 'none');
+                    
+                    $(this).find('.checkbox').show();
+                    
+                    // background shadow
+                    $(this).css('box-shadow', '0px 0px 6px 3px rgba(18,197,252,1)');
+                    
+                    
+                    $('#image_details').show();
+                    
+                    $('#tech_img').show().attr("src",  root_url + $(this).attr("data-small-image-url")) ;
+                    
+                    $('#tech_url').attr("value", root_url + $(this).attr("data-original-image-url"));
+                    
+                    $('#tech_file_name').text($(this).attr("data-image-file-name"));
+                    
+                    $('#tech_title').attr("value", $(this).attr("data-image-title"));
+                    
+                    $('#tech_description').text($(this).attr("data-image-description"));
+                    
+                    $('#tech_id').attr("value", $(this).attr("data-image-id"));
+                    
+                    
+                    
+                    image_size = $(this).attr("data-image-size")/1000;
+                    if (image_size > 1000){
+                        $('#tech_size').text((image_size/1000) + "MB") ;
+                        
+                    }else{
+                        $('#tech_size').text(image_size + "KB") ;
+                    }
+                    var date = $(this).attr("data-image-date");
+                    var date    = new Date(date)
+                    locale = "en-us",
+                    month = date.toLocaleString(locale, { month: "long" }),
+                    date = date.toLocaleString(locale, { month: "long" }) + " " + date.getDay() + ", " + date.getFullYear();
+                    $('#tech_date').text(date);
+                    $('#tech_delete').attr("href",  '/dashboard/images/' + $(this).attr("data-image-id")) ;
+                    
+                    
+                   
+                    previousTarget = this;
+                }
+                
+
+        });
+        
+        $('#image_collection').css('height', window.innerHeight - ($('#image_add').height()+ 21)  );
+        
+         $('#image_tech_details').on('click', '#post_insert', function() {
+            $.ajax({
+                type: "POST",
+                url: '/dashboard/images/'+ $('#tech_id').attr("value"),
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                data: { 
+                    _method:'PUT',
+                    title: $('#tech_title').attr("value"),
+                    description: $('#tech_description').val()
+                    
+                },
+                dataType: 'html',
+                success: function(msg) {
+
+                        window.opener.$.HandlePopupResult('<img src="'+ $('#tech_url').attr("value") + '"/>');
+
+                        self.close();
+
+                }
+            });
+             
+         });
+        
+        
+        
+        
+    });
+</script>
+
+<div id="image_insert">
+
+    <div id="image_left">
+    
+        hi
+    </div>
+    <div id="image_center">
+        
+        <div id="image_add">
+            <h1>Insert Media</h1>
+            <%= form_for Image.new do |f| %>
+            <%= f.label :image, "Upload Images:" %>
+            <%= f.file_field :image,multiple: true, name: "image[image]" %>
+            <% end %>
+            <script id="template-upload" type="text/x-tmpl"><div class="upload">{%=o.name%}<div class="progress"><div class="bar" style="width: 0%"></div></div></div></script>  
+        </div>
+        <div id="image_collection" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+            <% @images.each do |image| %>
+                <%= render partial: 'images/image', locals: { image: image } %>
+
+    
+            <% end %>
+        </div> 
+        <div id="image_right">
+              &nbsp;
+            <div id="image_details">
+                <div id="image_tech_details">
+                    <img id="tech_img" src=" "/>
+                    <input type="hidden" id="tech_id" value="Norway">
+                    <div id="tech_file_name"></div>
+                    <div id="tech_size"></div>
+                    <div id="tech_date"></div>
+                    <a id="tech_delete" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="" style="color: red;">Delete Permanetly</a>
+                    <table>
+                        <tr>
+                            <td>Url:</td>
+                            <td><input type="text" id="tech_url" size="28" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Title:</td>
+                            <td><input type="text" id="tech_title" size="28" ></td>
+                        </tr>
+                        <tr>
+                            <td>Caption:</td>
+                            <td><textarea rows="3" cols="30" id="tech_caption"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>Alt Text:</td>
+                            <td><input type="text" id="tech_alt_text" size="28" ></td>
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td><textarea rows="3" cols="30" id="tech_description"></textarea></td>
+                        </tr>
+                    </table>
+                    
+                    <button type="button" id="post_insert">Insert into post</button>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+

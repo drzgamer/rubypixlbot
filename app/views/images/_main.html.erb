@@ -1,0 +1,117 @@
+<p id="notice"><%= notice %></p>
+ <%= javascript_include_tag 'jquery-fileupload/jquery.fileupload.js','jquery-fileupload/vendor/jquery.ui.widget.js', 'jquery-fileupload/vendor/tmpl.js','jquery-fileupload/jquery.iframe-transport.js' %>
+<script type="text/javascript">
+    $(function() {
+        
+        
+        var image_center_width = $("#image_center").width()
+        var previousTarget=null;
+        var root_url = '<%= root_url %>'
+        root_url = root_url.slice(0, -1);
+        $('#image_collection').on('click', '.image_item', function() {
+            // hide all entry title elements
+                if(this===previousTarget) {
+                    $(this).find('.checkbox').hide();
+                    $('#image_right').hide();
+                    $('#tech_img').hide();
+                    $('#tech_size').hide();
+                    $('#tech_date').hide();
+                    $('#tech_delete').hide();
+                    $(this).css('box-shadow', 'none');
+                    $("#image_center").animate({ width: (image_center_width)}, 200);
+                    previousTarget = null;
+                }else{
+                    $('.checkbox').hide();
+                    $('.image_item').css('box-shadow', 'none');
+                    // show the clicked one
+                    $("#image_center").animate({ width: (image_center_width - 420 )}, 200);
+                    
+                    $(this).find('.checkbox').show();
+                    
+                    // background shadow
+                    $(this).css('box-shadow', '0px 0px 6px 3px rgba(18,197,252,1)');
+                    
+                    
+                    $('#image_right').delay(200).show(0);
+                    $('#tech_size').show();
+                    $('#tech_date').show();
+                    $('#tech_delete').show();
+                    
+                    $('#tech_img').show().attr("src",  root_url + $(this).attr("data-image-url")) ;
+                    
+                    image_size = $(this).attr("data-image-size")/1000;
+                    if (image_size > 1000){
+                        $('#tech_size').text((image_size/1000) + "MB") ;
+                        
+                    }else{
+                        $('#tech_size').text(image_size + "KB") ;
+                    }
+                    var date = $(this).attr("data-image-date");
+                    var date    = new Date(date)
+                    locale = "en-us",
+                    month = date.toLocaleString(locale, { month: "long" }),
+                    date = date.toLocaleString(locale, { month: "long" }) + " " + date.getDay() + ", " + date.getFullYear();
+                    $('#tech_date').text(date);
+                    $('#tech_delete').attr("href",  '/dashboard/images/' + $(this).attr("data-image-id")) ;
+                    
+                    
+                   
+                    previousTarget = this;
+                }
+                
+
+        });
+        
+        var redHeight = $('#image_center').height();
+        var brownHeight = $('#image_details').height();
+        
+        if (redHeight > brownHeight){
+            $('#image_details').css('height', redHeight );
+        }
+        else{
+            $('#image_center').css('height', brownHeight);
+        }
+    });
+</script>
+
+<h1>Listing Images</h1>
+
+<div id="image_main">
+    <% if @form == "insert" %>
+    <div id="image_left">
+    
+        hi
+    </div>
+    <% end %>
+    <div id="image_center">
+        <div id="image_add">
+            <%= form_for Image.new do |f| %>
+            <%= f.label :image, "Upload Images:" %>
+            <%= f.file_field :image,multiple: true, name: "image[image]" %>
+            <% end %>
+            <script id="template-upload" type="text/x-tmpl"><div class="upload">{%=o.name%}<div class="progress"><div class="bar" style="width: 0%"></div></div></div></script>  
+        </div>
+        <%= will_paginate @images %>
+        <div id="image_collection">
+            <% @images.each do |image| %>
+                <%= render partial: 'images/image', locals: { image: image } %>
+
+    
+            <% end %>
+        </div>   
+    </div>
+    <div id="image_right">
+  
+        <div id="image_details">
+            <div id="image_tech_details">
+                <img id="tech_img" src=" "/>
+                <div id="tech_size"></div>
+                <div id="tech_date"></div>
+                <a id="tech_delete" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="">Delete Image</a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+

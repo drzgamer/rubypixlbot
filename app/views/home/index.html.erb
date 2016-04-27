@@ -1,7 +1,22 @@
 <% @posts.each do |post| %>		
     <article class="post">		
 		<h2 class="title"><%= link_to post.title, post %></h2>		
-		<p class="date"><%= post.created_at.strftime("%B %d, %Y") %></p>		
+		<p class="date"><%= post.created_at.strftime("%B %d, %Y") %></p>
+		
+		<p class="content">
+			
+			<% 
+			
+			
+			
+			@stuff =  post.content.split("<!-- pagebreak -->", 2)%>
+			
+			<% if(@stuff[0] != nil)%>
+			<%= @stuff[0].html_safe %>
+			<% end %>
+			
+			
+			</p>
 				
 	</article>		
 <% end %> 
